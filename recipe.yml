@@ -44,10 +44,35 @@ stages:
           # - gh:vanilla-os/dev-image:main:modules/00-basics.yml # Sample GitHub remote module in the format: `gh:your-name/your-repo:branch:modules/file.yml`
           # - https://raw.githubusercontent.com/Vanilla-OS/dev-image/main/modules/05-go.yml # Sample full URL remote module
 
-      - name: xray-core-install # Sample module demonstrating the Shell module with custom commands
+      - name: xray-core-install
         type: shell
         commands:
-          - bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
+          - XRAY_VERSION=$(curl -s https://api.github.com/repos/XTLS/Xray-core/releases/latest | grep '"tag_name"' | cut -d'"' -f4)
+          - curl -L "https://github.com/XTLS/Xray-core/releases/download/${XRAY_VERSION}/Xray-linux-64.zip" -o /tmp/xray.zip
+          - unzip /tmp/xray.zip -d /tmp/xray
+          - install -m 755 /tmp/xray/xray /usr/local/bin/xray
+          - mkdir -p /usr/local/share/xray /etc/xray /var/log/xray
+          - install -m 644 /tmp/xray/geoip.dat /usr/local/share/xray/
+          - install -m 644 /tmp/xray/geosite.dat /usr/local/share/xray/
+          - |
+            cat > /etc/systemd/system/xray.service << 'EOF'
+            [Unit]
+            Description=Xray Service
+            After=network.target nss-lookup.target
+
+            [Service]
+            User=nobody
+            CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+            AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+            NoNewPrivileges=true
+            ExecStart=/usr/local/bin/xray run -config /etc/xray/config.json
+            Restart=on-failure
+            RestartPreventExitStatus=23
+
+            [Install]
+            WantedBy=multi-user.target
+            EOF
+          - rm -rf /tmp/xray /tmp/xray.zip
 
       # Put your custom actions above this comment
 
