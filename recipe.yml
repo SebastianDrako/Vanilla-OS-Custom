@@ -47,7 +47,7 @@ stages:
       - name: install-custom-apx
         type: shell
         commands:
-          - apt-get install -y golang git
+          - apt-get install -y golang git make
           - git clone https://github.com/SebastianDrako/apx /tmp/apx
           - cd /tmp/apx && make build
           - cp /tmp/apx/apx /usr/bin/apx
