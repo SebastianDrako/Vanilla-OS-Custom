@@ -52,7 +52,7 @@ stages:
           - cd /tmp/apx && make build
           - cp /tmp/apx/apx /usr/bin/apx
           - rm -rf /tmp/apx
-          - apt-get remove -y golang git
+          - apt-get remove -y golang git make
           - apt-get autoremove -y
 
       # Put your custom actions above this comment
