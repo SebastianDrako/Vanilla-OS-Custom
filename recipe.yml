@@ -50,10 +50,13 @@ stages:
           - packages:
               - micro
 
-      - name: ollama
+      - name: ollama-amd64
         type: shell
         commands:
-          - curl -fsSL https://ollama.com/install.sh | sh
+          - curl -fsSL https://ollama.com/download/ollama-linux-amd64.tar.zst | sudo tar x -C /usr
+          - curl -fsSL https://ollama.com/download/ollama-linux-amd64-rocm.tar.zst | sudo tar x -C /usr
+          - useradd -r -s /bin/false -U -m -d /usr/share/ollama ollama
+
       # Put your custom actions above this comment
 
       - name: set-image-name-abroot
