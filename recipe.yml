@@ -49,7 +49,6 @@ stages:
         sources:
           - packages:
               - micro
-              - lspci
 
       - name: ollama
         type: shell
