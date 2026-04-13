@@ -49,6 +49,12 @@ stages:
         sources:
           - packages:
               - micro
+              - lspci
+
+      - name: ollama
+        type: shell
+        commands:
+          - curl -fsSL https://ollama.com/install.sh | sh
       # Put your custom actions above this comment
 
       - name: set-image-name-abroot
