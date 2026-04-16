@@ -49,6 +49,7 @@ stages:
         sources:
           - packages:
               - micro
+              - podman-compose
 
       # Put your custom actions above this comment
 
