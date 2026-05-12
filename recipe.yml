@@ -57,6 +57,7 @@ stages:
               - iproute2
               - libnotify-bin
               - netcat-openbsd
+              - podman-docker
 
       # Put your custom actions above this comment
 
